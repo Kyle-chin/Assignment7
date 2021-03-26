@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         //==============================
         // used for trying to save from orientation
         //==============================
-        /*if(savedInstanceState != null){
+        if(savedInstanceState != null){
             if(!container2present) {
                 BookDetailsFragment bookloader = BookDetailsFragment.newInstance(bl.get(bookPosSelected));
                 getSupportFragmentManager()
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                         .replace(R.id.container_2, bookloader)
                         .commit();
             }
-        }*/
+        }
     }
 
     @Override
