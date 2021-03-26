@@ -41,6 +41,24 @@ public class BookDetailsFragment extends Fragment {
         }
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View l = inflater.inflate(R.layout.fragment_book_details, container, false);
 
+        Titletext = l.findViewById(R.id.TitleTV);
+        Authortext = l.findViewById(R.id.AuthorTV);
+
+        if(book != null)
+            changeBook(book);
+
+        return l;
+    }
+
+    public void changeBook(Book book){
+        Titletext.setText(book.getTitle());
+        Authortext.setText(book.getAuthor());
+
+    }
 
 }
