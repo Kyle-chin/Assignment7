@@ -9,14 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BookDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BookDetailsFragment extends Fragment {
 
-    private static final String ARG_BOOK = "param1";
+    private static final String ARG_BOOK = "book";
     TextView Titletext;
     TextView Authortext;
     private Book book;

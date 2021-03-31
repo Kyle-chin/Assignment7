@@ -1,50 +1,55 @@
 package edu.temple.assignment7;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.os.Parcelable;
 
 public class MainActivity extends AppCompatActivity implements BookListFragment.BookListFragmentInterface{
 
-    BookList bl;
-    BookDetailsFragment bdf;
+    FragmentManager fm;
+
     boolean container2present;
-    int bookPosSelected;
-    Parcelable parcy;
+    BookDetailsFragment bdf;
+    Book selectedBook;
+    private final String KEY_SELECTED_BOOK = "selectedBook";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        container2present = findViewById(R.id.container_2) != null;
-        bl = new BookList();
-        bl.AddBook(new Book("Mieko Kawakami", "Breasts and Eggs"));
-        bl.AddBook(new Book("Aoko Matsuda", "Where the Wild Ladies Are"));
-        bl.AddBook(new Book("James McBride", "Deacon King Kong"));
-        bl.AddBook(new Book("Megha Majumdar", "A Burning"));
-        bl.AddBook(new Book("Laura van den Berg", "I Hold a Wolf by the Ears"));
-        bl.AddBook(new Book("Ayad Akhtar", "Homeland Elegies"));
-        bl.AddBook(new Book("Lydia Millet", "A Children's Bible"));
-        bl.AddBook(new Book("Hilary Mantel", "The Mirror & the Light"));
-        bl.AddBook(new Book("Douglas Stuart", "Shuggie Bain"));
-        bl.AddBook(new Book("Brit Bennett", "The Vanishing Half"));
+        if(savedInstanceState != null)
+            selectedBook = savedInstanceState.getParcelable(KEY_SELECTED_BOOK);
 
-        if(!container2present){
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_1, BookListFragment.newInstance(bl))
+        container2present = findViewById(R.id.container_2) != null;
+
+        fm = getSupportFragmentManager();
+
+        Fragment fragment1;
+        fragment1 = fm.findFragmentById(R.id.container_1);
+        if(fragment1 instanceof BookDetailsFragment){
+            fm.popBackStack();
+        }
+        else if(!(fragment1 instanceof BookListFragment)){
+            fm.beginTransaction()
+                    .add(R.id.container_1, BookListFragment.newInstance(getTestBooks()))
                     .commit();
         }
-        else if(container2present){
-            bdf = new BookDetailsFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
+
+        bdf = (selectedBook == null) ? new BookDetailsFragment() : BookDetailsFragment.newInstance(selectedBook);
+        if(container2present){
+            fm.beginTransaction()
                     .replace(R.id.container_2, bdf)
                     .commit();
         }
-
-
+        else if(selectedBook != null){
+            fm.beginTransaction()
+                    .replace(R.id.container_1, bdf)
+                    .commit();
+        }
         //==============================
         // used for trying to save from orientation
         //==============================
@@ -70,24 +75,45 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         }*/
     }
 
+    private BookList getTestBooks(){
+        BookList bl= new BookList();
+        bl.AddBook(new Book("Mieko Kawakami", "Breasts and Eggs"));
+        bl.AddBook(new Book("Aoko Matsuda", "Where the Wild Ladies Are"));
+        bl.AddBook(new Book("James McBride", "Deacon King Kong"));
+        bl.AddBook(new Book("Megha Majumdar", "A Burning"));
+        bl.AddBook(new Book("Laura van den Berg", "I Hold a Wolf by the Ears"));
+        bl.AddBook(new Book("Ayad Akhtar", "Homeland Elegies"));
+        bl.AddBook(new Book("Lydia Millet", "A Children's Bible"));
+        bl.AddBook(new Book("Hilary Mantel", "The Mirror & the Light"));
+        bl.AddBook(new Book("Douglas Stuart", "Shuggie Bain"));
+        bl.AddBook(new Book("Brit Bennett", "The Vanishing Half"));
+        return bl;
+    }
     @Override
     public void bookClicked(int position) {
-        if(!container2present) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_1, BookDetailsFragment.newInstance(bl.get(position)))
-                    .addToBackStack(null)
-                    .commit();
+        selectedBook = getTestBooks().get(position);
+
+        if(container2present) {
+            bdf.changeBook(selectedBook);
         }
         else{
-            bdf.changeBook(bl.get(position));
-            bookPosSelected = position;
+            fm.beginTransaction()
+                    .replace(R.id.container_1, BookDetailsFragment.newInstance(selectedBook))
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        //outState.putInt("trial", bookPosSelected);
         super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_SELECTED_BOOK, selectedBook);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // If the user hits the back button, clear the selected book
+        selectedBook = null;
+        super.onBackPressed();
     }
 }
