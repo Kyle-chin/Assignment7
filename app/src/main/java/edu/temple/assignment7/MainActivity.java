@@ -76,8 +76,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     }
 
     private BookList getTestBooks(){
+        //https://kamorris.com/lab/cis3515/search.php?term=
         BookList bl= new BookList();
-        bl.AddBook(new Book("Mieko Kawakami", "Breasts and Eggs"));
+        /*bl.AddBook(new Book("Mieko Kawakami", "Breasts and Eggs"));
         bl.AddBook(new Book("Aoko Matsuda", "Where the Wild Ladies Are"));
         bl.AddBook(new Book("James McBride", "Deacon King Kong"));
         bl.AddBook(new Book("Megha Majumdar", "A Burning"));
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         bl.AddBook(new Book("Lydia Millet", "A Children's Bible"));
         bl.AddBook(new Book("Hilary Mantel", "The Mirror & the Light"));
         bl.AddBook(new Book("Douglas Stuart", "Shuggie Bain"));
-        bl.AddBook(new Book("Brit Bennett", "The Vanishing Half"));
+        bl.AddBook(new Book("Brit Bennett", "The Vanishing Half"));*/
         return bl;
     }
     @Override
