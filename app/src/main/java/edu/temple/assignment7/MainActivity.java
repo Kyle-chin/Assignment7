@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements BookListFragment.BookListFragmentInterface{
 
@@ -50,6 +53,15 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     .replace(R.id.container_1, bdf)
                     .commit();
         }
+
+        Button btnSearch = findViewById(R.id.btnSearch);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent launchIntent = new Intent(MainActivity.this, BookSearchActivity.class);
+                startActivity(launchIntent);
+            }
+        });
         //==============================
         // used for trying to save from orientation
         //==============================
