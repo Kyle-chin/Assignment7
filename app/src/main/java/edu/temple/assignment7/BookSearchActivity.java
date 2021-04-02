@@ -55,33 +55,13 @@ public class BookSearchActivity extends AppCompatActivity {
                 finish();
             }
         });
-        /*final EditText prompt = new EditText(this);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Find A Book");
-        builder.setView(prompt);
-        String searchText = prompt.getText().toString();
-        builder.setPositiveButton("Search", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                String myText = prompt.getText().toString();
-            }
-        });
 
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        AlertDialog promptDialog = builder.create();
-        promptDialog.show();
-        */
         requestQueue = Volley.newRequestQueue(this);
 
         btnSearch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String urlString = "https://kamorris.com/lab/cis3515/search.php?term="; //+ editSearch.getText().toString();
+                String urlString = "https://kamorris.com/lab/cis3515/search.php?term=" + editSearch.getText().toString();
 
                 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlString, null, new Response.Listener<JSONArray>() {
                     @Override
@@ -106,7 +86,7 @@ public class BookSearchActivity extends AppCompatActivity {
                         }
                         Intent launchIntent = new Intent(BookSearchActivity.this, MainActivity.class);
                         launchIntent.putExtra("bookslisted", (Parcelable) blist);
-
+                        //setResult(RESULT_OK, launchIntent);
                         startActivity(launchIntent);
                     }
                 }, new Response.ErrorListener(){

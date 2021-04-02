@@ -8,17 +8,17 @@ public class Book implements Parcelable {
     private int ID;
 
     Book(String titl, String auth, int id, String coverurl){
-        author = auth;
         title = titl;
-        coverURL = coverurl;
+        author = auth;
         ID = id;
+        coverURL = coverurl;
     }
 
     protected Book(Parcel in) {
-        author = in.readString();
         title = in.readString();
-        coverURL = in.readString();
+        author = in.readString();
         ID = in.readInt();
+        coverURL = in.readString();
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -58,6 +58,8 @@ public class Book implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(author);
         dest.writeString(title);
+        dest.writeInt(ID);
+        dest.writeString(coverURL);
     }
     public String getCoverURL(){
         return coverURL;

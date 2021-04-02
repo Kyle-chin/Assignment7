@@ -1,5 +1,6 @@
 package edu.temple.assignment7;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     Button btnSearch;
     private final String KEY_SELECTED_BOOK = "selectedBook";
     BookList bList;
-
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +33,12 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             selectedBook = savedInstanceState.getParcelable(KEY_SELECTED_BOOK);
 
         container2present = findViewById(R.id.container_2) != null;
-        bList = new BookList();
-        //fm =
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container_1, BookListFragment.newInstance(bList))
-                .commit();
 
-        /*Fragment fragment1;
+        bList = new BookList();
+        fm = getSupportFragmentManager();
+
+
+        Fragment fragment1;
         fragment1 = fm.findFragmentById(R.id.container_1);
         if(fragment1 instanceof BookDetailsFragment){
             fm.popBackStack();
@@ -48,18 +47,25 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             fm.beginTransaction()
                     .add(R.id.container_1, BookListFragment.newInstance(bList))
                     .commit();
-        }*/
-
+        }
+        btnSearch = findViewById(R.id.btnSearch);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent launchIntent = new Intent(MainActivity.this, BookSearchActivity.class);
+                startActivity(launchIntent);
+            }
+        });
         bdf = (selectedBook == null) ? new BookDetailsFragment() : BookDetailsFragment.newInstance(selectedBook);
 
-        Intent intent = getIntent();
+        intent = getIntent();
         if(container2present){
-            bdf = new BookDetailsFragment();
-            /*
+
             if(intent.hasExtra("bookslisted")){
                 Bundle extras = getIntent().getExtras();
                 bList = extras.getParcelable("bookslisted");
-            }*/
+            }
+            bdf = new BookDetailsFragment();
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container_2, bdf)
@@ -76,14 +82,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     .commit();
         }
 
-        btnSearch = findViewById(R.id.btnSearch);
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent launchIntent = new Intent(MainActivity.this, BookSearchActivity.class);
-                startActivity(launchIntent);
-            }
-        });
     }
 
     @Override
