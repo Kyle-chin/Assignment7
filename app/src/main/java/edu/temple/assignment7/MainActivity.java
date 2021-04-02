@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     Book selectedBook;
     Button btnSearch;
     private final String KEY_SELECTED_BOOK = "selectedBook";
-    BookList bList = new BookList();
+    BookList bList;
 
 
     @Override
@@ -27,14 +27,19 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         if(savedInstanceState != null)
             selectedBook = savedInstanceState.getParcelable(KEY_SELECTED_BOOK);
 
         container2present = findViewById(R.id.container_2) != null;
+        bList = new BookList();
+        //fm =
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container_1, BookListFragment.newInstance(bList))
+                .commit();
 
-        fm = getSupportFragmentManager();
-
-        Fragment fragment1;
+        /*Fragment fragment1;
         fragment1 = fm.findFragmentById(R.id.container_1);
         if(fragment1 instanceof BookDetailsFragment){
             fm.popBackStack();
@@ -43,26 +48,31 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             fm.beginTransaction()
                     .add(R.id.container_1, BookListFragment.newInstance(bList))
                     .commit();
-        }
+        }*/
 
         bdf = (selectedBook == null) ? new BookDetailsFragment() : BookDetailsFragment.newInstance(selectedBook);
+
         Intent intent = getIntent();
         if(container2present){
+            bdf = new BookDetailsFragment();
+            /*
             if(intent.hasExtra("bookslisted")){
                 Bundle extras = getIntent().getExtras();
                 bList = extras.getParcelable("bookslisted");
-            }
-            fm.beginTransaction()
+            }*/
+            getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.container_2, bdf)
                     .commit();
         }
-        else if(selectedBook != null){
+        else {//if(selectedBook != null){
             if(intent.hasExtra("bookslisted")){
                 Bundle extras = getIntent().getExtras();
                 bList = extras.getParcelable("bookslisted");
             }
-            fm.beginTransaction()
-                    .replace(R.id.container_1, bdf)
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container_1, BookListFragment.newInstance(bList))
                     .commit();
         }
 
@@ -76,20 +86,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         });
     }
 
-    private BookList getTestBooks(){
-        BookList bl= new BookList();
-        /*bl.AddBook(new Book("Mieko Kawakami", "Breasts and Eggs"));
-        bl.AddBook(new Book("Aoko Matsuda", "Where the Wild Ladies Are"));
-        bl.AddBook(new Book("James McBride", "Deacon King Kong"));
-        bl.AddBook(new Book("Megha Majumdar", "A Burning"));
-        bl.AddBook(new Book("Laura van den Berg", "I Hold a Wolf by the Ears"));
-        bl.AddBook(new Book("Ayad Akhtar", "Homeland Elegies"));
-        bl.AddBook(new Book("Lydia Millet", "A Children's Bible"));
-        bl.AddBook(new Book("Hilary Mantel", "The Mirror & the Light"));
-        bl.AddBook(new Book("Douglas Stuart", "Shuggie Bain"));
-        bl.AddBook(new Book("Brit Bennett", "The Vanishing Half"));*/
-        return bl;
-    }
     @Override
     public void bookClicked(int position) {
         selectedBook = bList.get(position);

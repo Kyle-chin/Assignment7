@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +20,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,7 +81,7 @@ public class BookSearchActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String urlString = "https://kamorris.com/lab/cis3515/search.php?term=" + editSearch.getText().toString();
+                String urlString = "https://kamorris.com/lab/cis3515/search.php?term="; //+ editSearch.getText().toString();
 
                 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlString, null, new Response.Listener<JSONArray>() {
                     @Override
@@ -102,7 +105,7 @@ public class BookSearchActivity extends AppCompatActivity {
 
                         }
                         Intent launchIntent = new Intent(BookSearchActivity.this, MainActivity.class);
-                        launchIntent.putExtra("bookslisted", blist);
+                        launchIntent.putExtra("bookslisted", (Parcelable) blist);
 
                         startActivity(launchIntent);
                     }

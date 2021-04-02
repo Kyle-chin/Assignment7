@@ -59,4 +59,10 @@ public class Book implements Parcelable {
         dest.writeString(author);
         dest.writeString(title);
     }
+    public String getCoverURL(){
+        return coverURL;
+    }
+    public void setCoverURL(String coverURL) {
+        this.coverURL = coverURL;
+    }
 }

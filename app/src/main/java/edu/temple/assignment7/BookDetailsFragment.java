@@ -7,13 +7,17 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class BookDetailsFragment extends Fragment {
 
     private static final String ARG_BOOK = "book";
     TextView Titletext;
     TextView Authortext;
+    ImageView imageView;
     private Book book;
 
     public BookDetailsFragment() {
@@ -43,6 +47,7 @@ public class BookDetailsFragment extends Fragment {
 
         Titletext = l.findViewById(R.id.TitleTV);
         Authortext = l.findViewById(R.id.AuthorTV);
+        imageView = l.findViewById(R.id.imageViewid);
 
         if(book != null)
             changeBook(book);
@@ -53,7 +58,7 @@ public class BookDetailsFragment extends Fragment {
     public void changeBook(Book book){
         Titletext.setText(book.getTitle());
         Authortext.setText(book.getAuthor());
-
+        Picasso.get().load(book.getCoverURL()).into(imageView);
     }
 
 }
