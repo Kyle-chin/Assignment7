@@ -7,7 +7,7 @@ public class Book implements Parcelable {
     private String author, title, coverURL;
     private int ID;
 
-    Book(String auth, String titl, String coverurl, int id){
+    Book(String titl, String auth, int id, String coverurl){
         author = auth;
         title = titl;
         coverURL = coverurl;

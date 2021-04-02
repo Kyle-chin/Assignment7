@@ -17,7 +17,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     boolean container2present;
     BookDetailsFragment bdf;
     Book selectedBook;
+    Button btnSearch;
     private final String KEY_SELECTED_BOOK = "selectedBook";
+    BookList bList = new BookList();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,23 +41,32 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         }
         else if(!(fragment1 instanceof BookListFragment)){
             fm.beginTransaction()
-                    .add(R.id.container_1, BookListFragment.newInstance(getTestBooks()))
+                    .add(R.id.container_1, BookListFragment.newInstance(bList))
                     .commit();
         }
 
         bdf = (selectedBook == null) ? new BookDetailsFragment() : BookDetailsFragment.newInstance(selectedBook);
+        Intent intent = getIntent();
         if(container2present){
+            if(intent.hasExtra("bookslisted")){
+                Bundle extras = getIntent().getExtras();
+                bList = extras.getParcelable("bookslisted");
+            }
             fm.beginTransaction()
                     .replace(R.id.container_2, bdf)
                     .commit();
         }
         else if(selectedBook != null){
+            if(intent.hasExtra("bookslisted")){
+                Bundle extras = getIntent().getExtras();
+                bList = extras.getParcelable("bookslisted");
+            }
             fm.beginTransaction()
                     .replace(R.id.container_1, bdf)
                     .commit();
         }
 
-        Button btnSearch = findViewById(R.id.btnSearch);
+        btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,33 +74,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 startActivity(launchIntent);
             }
         });
-        //==============================
-        // used for trying to save from orientation
-        //==============================
-        /*if(savedInstanceState != null){
-            if(!container2present) {
-                BookDetailsFragment bookloader = BookDetailsFragment.newInstance(bl.get(bookPosSelected));
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container_1, bookloader)
-                        .commit();
-            }
-            else{
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container_1, BookListFragment.newInstance(bl))
-                        .commit();
-                BookDetailsFragment bookloader = BookDetailsFragment.newInstance(bl.get(bookPosSelected));
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container_2, bookloader)
-                        .commit();
-            }
-        }*/
     }
 
     private BookList getTestBooks(){
-        //https://kamorris.com/lab/cis3515/search.php?term=
         BookList bl= new BookList();
         /*bl.AddBook(new Book("Mieko Kawakami", "Breasts and Eggs"));
         bl.AddBook(new Book("Aoko Matsuda", "Where the Wild Ladies Are"));
@@ -104,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     }
     @Override
     public void bookClicked(int position) {
-        selectedBook = getTestBooks().get(position);
+        selectedBook = bList.get(position);
 
         if(container2present) {
             bdf.changeBook(selectedBook);
