@@ -5,13 +5,14 @@ import android.os.Parcelable;
 
 public class Book implements Parcelable {
     private String author, title, coverURL;
-    private int ID;
+    private int ID, duration;
 
-    Book(String titl, String auth, int id, String coverurl){
+    Book(String titl, String auth, int id, String coverurl, int dur){
         title = titl;
         author = auth;
         ID = id;
         coverURL = coverurl;
+        duration = dur;
     }
 
     protected Book(Parcel in) {
@@ -19,6 +20,7 @@ public class Book implements Parcelable {
         author = in.readString();
         ID = in.readInt();
         coverURL = in.readString();
+        duration = in.readInt();
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -36,7 +38,12 @@ public class Book implements Parcelable {
     public String getAuthor() {
         return author;
     }
-
+    public int getID(){
+        return ID;
+    }
+    public int getDuration(){
+        return duration;
+    }
     public void setAuthor(String author) {
         this.author = author;
     }

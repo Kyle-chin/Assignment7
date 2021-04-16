@@ -34,6 +34,9 @@ import java.net.URL;
 
 public class BookSearchActivity extends AppCompatActivity {
 
+    private final String urlPrefix = "https://kamorris.com/lab/cis3515/search.php?term=";
+    public static final String BOOKLIST_KEY = "booklisted";
+
     Button btnSearch;
     Button btnCancel;
     EditText editSearch;
@@ -48,6 +51,8 @@ public class BookSearchActivity extends AppCompatActivity {
         editSearch = findViewById(R.id.editSearchText);
         btnSearch = findViewById(R.id.btnSearchInside);
         btnCancel = findViewById(R.id.btnCancel);
+        requestQueue = Volley.newRequestQueue(this);
+
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,12 +61,12 @@ public class BookSearchActivity extends AppCompatActivity {
             }
         });
 
-        requestQueue = Volley.newRequestQueue(this);
+
 
         btnSearch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String urlString = "https://kamorris.com/lab/cis3515/search.php?term=" + editSearch.getText().toString();
+                String urlString = urlPrefix + editSearch.getText().toString();
 
                 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlString, null, new Response.Listener<JSONArray>() {
                     @Override
@@ -85,7 +90,7 @@ public class BookSearchActivity extends AppCompatActivity {
 
                         }
                         Intent launchIntent = new Intent(BookSearchActivity.this, MainActivity.class);
-                        launchIntent.putExtra("bookslisted", (Parcelable) blist);
+                        launchIntent.putExtra(BOOKLIST_KEY, (Parcelable) blist);
                         //setResult(RESULT_OK, launchIntent);
                         startActivity(launchIntent);
                     }

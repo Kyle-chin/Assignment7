@@ -25,6 +25,14 @@ public class BookList implements Parcelable{
             return new BookList[size];
         }
     };
+    public void clear () {
+        bList.clear();
+    }
+    public void addAll (BookList books) {
+        for (int i = 0; i < books.size(); i++) {
+            this.bList.add(books.get(i));
+        }
+    }
     public void RemoveBook(Book book){
         bList.remove(book);
     }
