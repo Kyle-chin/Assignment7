@@ -44,6 +44,9 @@ public class BookListFragment extends Fragment {
         if (getArguments() != null) {
             bl = getArguments().getParcelable(ARG_BOOKLIST);
         }
+        else{
+            bl = new BookList();
+        }
     }
 
     @Override

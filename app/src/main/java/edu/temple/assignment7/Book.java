@@ -41,8 +41,14 @@ public class Book implements Parcelable {
     public int getID(){
         return ID;
     }
+    public void setID(int ID){
+        this.ID = ID;
+    }
     public int getDuration(){
         return duration;
+    }
+    public void setDuration(int duration){
+        this.duration = duration;
     }
     public void setAuthor(String author) {
         this.author = author;
@@ -67,6 +73,7 @@ public class Book implements Parcelable {
         dest.writeString(title);
         dest.writeInt(ID);
         dest.writeString(coverURL);
+        dest.writeInt(duration);
     }
     public String getCoverURL(){
         return coverURL;

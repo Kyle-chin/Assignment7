@@ -11,7 +11,7 @@
         android:id="@+id/TitleTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="168dp"
+        android:layout_marginTop="212dp"
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -28,17 +28,17 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TitleTV"
-        app:layout_constraintVertical_bias="0.122" />
+        app:layout_constraintVertical_bias="0.047" />
 
     <ImageView
         android:id="@+id/imageViewid"
-        android:layout_width="164dp"
-        android:layout_height="212dp"
+        android:layout_width="240dp"
+        android:layout_height="281dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AuthorTV"
-        app:layout_constraintVertical_bias="0.287"
+        app:layout_constraintVertical_bias="0.358"
         tools:src="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>

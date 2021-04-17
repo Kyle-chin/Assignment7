@@ -22,7 +22,7 @@ import android.widget.SeekBar;
 
 import edu.temple.audiobookplayer.AudiobookService;
 
-public class MainActivity extends AppCompatActivity implements BookListFragment.BookListFragmentInterface{
+public class MainActivity extends AppCompatActivity implements BookListFragment.BookListFragmentInterface, ControlFragment.ControlFragmentInterface{
 
     FragmentManager fm;
 
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     boolean playWasClicked;
 
     Intent intent;
-    private static final String ARG_BOOKLIST = "books";
+    private static final String ARG_BOOKLIST = "bookslisted";
     private static final String SEEKBAR_PROGRESS = "sbProgress";
     private static final String DURATION = "bookDuration";
 
@@ -53,13 +53,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             mediaControlBinder.setProgressHandler(mediaControlHandler);
             connected = true;
         }
-
         @Override
         public void onServiceDisconnected(ComponentName name) {
             connected = false;
         }
     };
-
     Handler mediaControlHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
@@ -70,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 seekBar.setProgress(bookProgress.getProgress());
                 progress = selectedBook.getDuration();
                 bookUri = bookProgress.getBookUri();
-
             }
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -79,15 +76,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                         mediaControlBinder.seekTo(progress);
                     }
                 }
-
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
-
                 }
-
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-
                 }
             });
             return false;
@@ -142,22 +135,25 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 Bundle extras = getIntent().getExtras();
                 bList = extras.getParcelable("bookslisted");
             }
-            bdf = new BookDetailsFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_2, bdf)
+            fm.beginTransaction()
+                    .replace(R.id.container_1, BookListFragment.newInstance(bList))
+                    .replace(R.id.container_2, BookDetailsFragment.newInstance(selectedBook))
+                    .replace(R.id.container_controlled_addition2, ControlFragment.newInstance(selectedBook))
                     .commit();
         }
-        else {//if(selectedBook != null){
+        else {
             if(intent.hasExtra("bookslisted")){
                 Bundle extras = getIntent().getExtras();
                 bList = extras.getParcelable("bookslisted");
             }
-            getSupportFragmentManager()
-                    .beginTransaction()
+            fm.beginTransaction()
                     .replace(R.id.container_1, BookListFragment.newInstance(bList))
+                    //.replace(R.id.container_controlled_addition, ControlFragment.newInstance(selectedBook))
                     .commit();
         }
+
+        intent = new Intent(this, AudiobookService.class);
+        bindService(intent, bookServiceConnection, BIND_AUTO_CREATE);
 
     }
 
@@ -165,21 +161,49 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     public void bookClicked(int position) {
         selectedBook = bList.get(position);
 
-        if(container2present) {
-            bdf.changeBook(selectedBook);
+        if(!container2present) {
+            fm.beginTransaction()
+                    .replace(R.id.container_1, BookDetailsFragment.newInstance(selectedBook))
+                    .replace(R.id.container_controlled_addition, ControlFragment.newInstance(selectedBook))
+                    .commit();
         }
         else{
             fm.beginTransaction()
-                    .replace(R.id.container_1, BookDetailsFragment.newInstance(selectedBook))
+                    .replace(R.id.container_2, BookDetailsFragment.newInstance(selectedBook))
+                    .replace(R.id.container_controlled_addition2, ControlFragment.newInstance(selectedBook))
                     .addToBackStack(null)
                     .commit();
         }
+        bookIndex = position;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(KEY_SELECTED_BOOK, selectedBook);
+        outState.putParcelable(ARG_BOOKLIST, selectedBook);
+        outState.putInt(SEEKBAR_PROGRESS, progress);
+        outState.putInt(DURATION, duration);
+    }
+
+    @Override
+    public void playBook(int id){
+        if(connected){
+            startService(intent);
+            duration = selectedBook.getDuration();
+            mediaControlBinder.setProgressHandler(mediaControlHandler);
+            mediaControlBinder.play(id);
+            playWasClicked = true;
+        }
+    }
+    @Override
+    public void pauseBook(int id){
+        mediaControlBinder.pause();
+    }
+
+    @Override
+    public void stopBook(int id){
+        mediaControlBinder.stop();
+        seekBar.setProgress(0);
     }
 
     @Override

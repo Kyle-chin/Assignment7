@@ -34,9 +34,6 @@ import java.net.URL;
 
 public class BookSearchActivity extends AppCompatActivity {
 
-    private final String urlPrefix = "https://kamorris.com/lab/cis3515/search.php?term=";
-    public static final String BOOKLIST_KEY = "booklisted";
-
     Button btnSearch;
     Button btnCancel;
     EditText editSearch;
@@ -66,7 +63,7 @@ public class BookSearchActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String urlString = urlPrefix + editSearch.getText().toString();
+                String urlString = "https://kamorris.com/lab/cis3515/search.php?term=" + editSearch.getText().toString();
 
                 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlString, null, new Response.Listener<JSONArray>() {
                     @Override
@@ -79,7 +76,8 @@ public class BookSearchActivity extends AppCompatActivity {
                                     blist.AddBook(new Book(book_JSON.getString("title"),
                                             book_JSON.getString("author"),
                                             book_JSON.getInt("id"),
-                                            book_JSON.getString("cover_url")));
+                                            book_JSON.getString("cover_url"),
+                                            book_JSON.getInt("duration")));
                                 }
                                 catch (JSONException e){
                                     e.printStackTrace();
@@ -90,9 +88,10 @@ public class BookSearchActivity extends AppCompatActivity {
 
                         }
                         Intent launchIntent = new Intent(BookSearchActivity.this, MainActivity.class);
-                        launchIntent.putExtra(BOOKLIST_KEY, (Parcelable) blist);
+                        launchIntent.putExtra("bookslisted", blist);
                         //setResult(RESULT_OK, launchIntent);
                         startActivity(launchIntent);
+                        finish();
                     }
                 }, new Response.ErrorListener(){
                     @Override
